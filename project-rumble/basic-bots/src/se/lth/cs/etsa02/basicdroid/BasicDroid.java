@@ -32,7 +32,12 @@ import robocode.util.Utils;
 
 import static robocode.util.Utils.normalRelativeAngleDegrees;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
+
+import bots.MessageReader;
+import bots.MessageWriter;
+import bots.RobotColors;
 
 
 /**
@@ -73,12 +78,15 @@ public class BasicDroid extends TeamRobot implements Droid {
 			if (reader.getMoveTo() != null) {
 				goTo(reader.getMoveTo());
 			}
+			if (reader.getTargetPos() != null) {
+				fireAtPoint(reader.getTargetPos());
+			}
 			
 			// If enemy position, fire!
 			String[] values = reader.getEnemyDetails();
 			if (values.length > 0) {
 				String[] ss = values[0].split(";");
-				Point p = null;
+				Point2D.Double p = null;
 				try {
 					double energy = Double.parseDouble(ss[4]);
 					if (energy <= 0) {
@@ -86,7 +94,7 @@ public class BasicDroid extends TeamRobot implements Droid {
 					}
 					double x = Double.parseDouble(ss[1]);
 					double y = Double.parseDouble(ss[2]);
-					p = new Point(x,y);
+					p = new Point2D.Double(x,y);
 				} catch (RuntimeException err) {}
 				if (p != null) {
 					fireAtPoint(p);
@@ -97,7 +105,7 @@ public class BasicDroid extends TeamRobot implements Droid {
 	}
 
 	
-	private void fireAtPoint(Point p) {
+	private void fireAtPoint(Point2D.Double p) {
 		// Calculate x and y to target
 		double dx = p.getX() - this.getX();
 		double dy = p.getY() - this.getY();
@@ -116,7 +124,7 @@ public class BasicDroid extends TeamRobot implements Droid {
 	 * The code comes from <a href="http://robowiki.net/wiki/GoTo"> http://robowiki.net/wiki/GoTo </a>
 	 * @param destination coordinates of the destination
 	 */
-	private void goTo(Point destination) {
+	private void goTo(Point2D.Double destination) {
 		/* Transform our coordinates into a vector */
 		double x = destination.getX();
 		double y = destination.getY();

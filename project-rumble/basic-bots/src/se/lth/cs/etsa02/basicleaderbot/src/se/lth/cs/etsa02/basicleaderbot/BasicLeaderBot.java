@@ -35,6 +35,8 @@ import se.lth.cs.etsa02.RobotColors;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import bots.DummyRobot;
 /**
  * BasicLeaderBot (BLB) - a sample team robot for ETSA02.
  * 

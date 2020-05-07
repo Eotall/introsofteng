@@ -24,6 +24,8 @@ SOFTWARE.
 
 package se.lth.cs.etsa02;
 
+import java.awt.geom.Point2D;
+
 /**
  * A class to help with the reading of messages.
  * @author DavidPhung
@@ -64,9 +66,9 @@ public class MessageReader {
 	 * Returns the value of the myPos line if the message contains it. Otherwise returns null.
 	 * @return a point created from the (x,y) values in the myPos line or null if the line is not included in the message or parsing fails.
 	 */
-	public Point getMyPos() {
+	public String[] getMyPos() {
 		String[] values = getValues("myPos");
-		if (values.length > 0) return parsePoint(values[0]);
+		if (values.length > 0) return values;
 		return null;
 	}
 	
@@ -113,9 +115,12 @@ public class MessageReader {
 	 * Returns the value of the targetPos line if the message contains it. Otherwise returns null.
 	 * @return a point created from the (x,y) values in the targetPos line or null if the line is not included in the message or parsing fails.
 	 */
-	public Point getTargetPos() {
+	public Point2D.Double getTargetPos() {
 		String[] values = getValues("targetPos");
-		if (values.length > 0) return parsePoint(values[0]);
+		if (values.length > 0) {
+			String[] data = values[0].split(";");
+			return new Point2D.Double(Double.parseDouble(data[0]), Double.parseDouble(data[1]));
+		}
 		return null;
 	}
 	
@@ -123,26 +128,13 @@ public class MessageReader {
 	 * Returns the value of the moveTo line if the message contains it. Otherwise returns null.
 	 * @return a point created from the (x,y) values in the moveTo line or null if the line is not included in the message or parsing fails.
 	 */
-	public Point getMoveTo() {
+	public Point2D.Double getMoveTo() {
 		String[] values = getValues("moveTo");
-		if (values.length > 0) return parsePoint(values[0]);
+		if (values.length > 0) {
+			String[] data = values[0].split(";");
+			return new Point2D.Double(Double.parseDouble(data[0]), Double.parseDouble(data[1]));
+		}
 		return null;
-	}
-	
-	/**
-	 * Create a point from a string of form "x;y"
-	 * @param s input string, should follow the form "x;y"
-	 * @return The point (x,y) or null if parsing fails.
-	 */
-	private Point parsePoint(String s) {
-		Point p = null;
-		String[] ss = s.split(";");
-		try {
-			double x = Double.parseDouble(ss[0]);
-			double y = Double.parseDouble(ss[1]);
-			p = new Point(x,y);
-		}catch (RuntimeException e) {}
-		return p;
 	}
 	
 	/**
